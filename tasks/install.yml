@@ -21,14 +21,21 @@
   command: restorecon /usr/share/tomcat/webapps/ROOT.war
 
 - name: Fedora data directory exists
-  file: "path={{ fedora_data_dir }} state=directory mode=0775 owner=tomcat group=wheel"
+  file:
+    path: "{{ fedora_data_dir }}"
+    state: directory
+    mode: 0775
+    owner: tomcat
+    group: wheel
 
 - name: Fedora JAVA_OPTS
   lineinfile: "dest=/usr/share/tomcat/conf/tomcat.conf state=present line='JAVA_OPTS=\"-Dfcrepo.home={{ fedora_data_dir }}\"'"
   /usr/share/tomcat/conf/tomcat.conf
 
 - name: Delete default root webapp
-  file: path=/usr/share/tomcat/webapps/ROOT state=absent
+  file:
+    path: /usr/share/tomcat/webapps/ROOT
+    state: absent
 
 - name: Tomcat restarted
   service:
