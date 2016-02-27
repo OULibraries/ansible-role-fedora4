@@ -1,0 +1,3 @@
+---
+# defaults file for fedora4
+fedora_data_dir: '/mnt/fedora-data'

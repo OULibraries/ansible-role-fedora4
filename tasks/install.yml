@@ -1,0 +1,37 @@
+---
+## Did with_items in case we add more packages later
+- name: Tomcat packages
+  yum: name={{ item }} state=present
+  with_items:
+  - tomcat
+
+## Newer versions include javassist-3.19.0-GA.jar, which makes tomcat angry
+- name: Fedora Repository 4.3.0 war
+  get_url:
+    dest: /usr/share/tomcat/webapps/ROOT.war
+    owner: tomcat
+    group: wheel
+    mode: 0770
+    url: https://github.com/fcrepo4/fcrepo4/releases/download/fcrepo-4.3.0/fcrepo-webapp-4.3.0.war
+
+- name: Set default SELinux context for war
+  command: semanage fcontext -a -t tomcat_var_lib_t '/usr/share/tomcat/webapps/ROOT.war'
+
+- name: Apply default SELinux context to war
+  command: restorecon /usr/share/tomcat/webapps/ROOT.war
+
+- name: Fedora data directory exists
+  file: "path={{ fedora_data_dir }} state=directory mode=0775 owner=tomcat group=wheel"
+
+- name: Fedora JAVA_OPTS
+  lineinfile: "dest=/usr/share/tomcat/conf/tomcat.conf state=present line='JAVA_OPTS=\"-Dfcrepo.home={{ fedora_data_dir }}\"'"
+  /usr/share/tomcat/conf/tomcat.conf
+
+- name: Delete default root webapp
+  file: path=/usr/share/tomcat/webapps/ROOT state=absent
+
+- name: Tomcat restarted
+  service:
+    name: tomcat
+    state: restarted
+    enabled: yes

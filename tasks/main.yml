@@ -1,0 +1,3 @@
+---
+# tasks file for fedora4
+- include: install.yml
