@@ -30,7 +30,6 @@
 
 - name: Fedora JAVA_OPTS
   lineinfile: "dest=/usr/share/tomcat/conf/tomcat.conf state=present line='JAVA_OPTS=\"-Dfcrepo.home={{ fedora_data_dir }}\"'"
-  /usr/share/tomcat/conf/tomcat.conf
 
 - name: Delete default root webapp
   file:
