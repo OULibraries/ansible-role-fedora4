@@ -22,7 +22,7 @@ OULibraries.centos7
 License
 -------
 
-TBD
+[MIT](https://github.com/OULibraries/ansible-role-fedora4/blob/master/LICENSE)
 
 Author Information
 ------------------
